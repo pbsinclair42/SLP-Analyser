@@ -26,6 +26,9 @@ class SLP:
             raise SLPException("Unknown Symbol")
         self.value = self.values[-1]
 
+    def __len__(self):
+        return len(self.lines)
+
     def __str__(self):
         max_len = int(log(len(self.lines), 10))+1
         to_return = '{p1}L0: {p1}1\n'.format(
