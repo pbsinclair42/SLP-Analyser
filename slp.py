@@ -70,6 +70,12 @@ class SLP:
             i += 1
         return to_return[:-1]
 
+    #def __deepcopy__(self, memodict={}):
+    #    copy = SLP()
+    #    for line in self.lines[1:]:
+    #        copy.add(line)
+    #    return copy
+
 
 class PosSLP(SLP):
     def add(self, line):
