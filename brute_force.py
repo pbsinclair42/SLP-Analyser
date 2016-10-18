@@ -7,7 +7,7 @@ from utils import Line
 class Analyser:
 
     def __init__(self, pos=False):
-        self.slps = [{PosSLP() if pos else SLP()}]
+        self.slps = [{PosSLP(minimized=True) if pos else SLP(minimized=True)}]
         self.values = {1}
         self.current_size = 1
         self.pos = pos

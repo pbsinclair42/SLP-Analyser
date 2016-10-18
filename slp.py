@@ -29,6 +29,11 @@ class SLP:
             raise SLPException("Unknown Symbol")
         self.value = self.values[-1]
 
+    def minimize(self):
+        if not self.minimized:
+            self.minimized = True
+            del self.lines
+
     def __len__(self):
         return len(self.values)
 
