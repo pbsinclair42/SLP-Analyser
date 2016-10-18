@@ -4,15 +4,18 @@ from utils import Line, SLPException
 
 
 class SLP:
-    def __init__(self):
-        self.lines = [Line("DUMMY", "LINE", '+')]
+    def __init__(self, minimized=False):
+        self.minimized = minimized
+        if not self.minimized:
+            self.lines = [Line("DUMMY", "LINE", '+')]
         self.values = [1]
         self.value = 1
 
     def add(self, line):
-        if line.x >= len(self.lines) or line.y >= len(self.lines):
+        if line.x >= len(self.values) or line.y >= len(self.values):
             raise SLPException("Line index too large")
-        self.lines.append(line)
+        if not self.minimized:
+            self.lines.append(line)
         self.evaluate(line)
 
     def evaluate(self, line):
@@ -27,9 +30,11 @@ class SLP:
         self.value = self.values[-1]
 
     def __len__(self):
-        return len(self.lines)
+        return len(self.values)
 
     def __str__(self):
+        if self.minimized:
+            return str(self.values)
         max_len = int(log(len(self.lines), 10))+1
         to_return = '{p1}L0: {p1}1\n'.format(
             p1=' ' * (max_len - 1),
@@ -50,6 +55,8 @@ class SLP:
         return to_return[:-1]
 
     def __repr__(self):
+        if self.minimized:
+            return str(self.values)
         max_len = int(log(len(self.lines), 10))+1
         to_return = '{p1}L0: {p1}1    {p1}    = {value}\n'.format(
             p1=' ' * (max_len - 1),
