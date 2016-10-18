@@ -21,7 +21,8 @@ class Analyser:
                 next_slps[1].add(Line(i, j, '+'))
                 if not self.pos:
                     next_slps[2].add(Line(i, j, '-'))
-                next_slps = {slp for slp in next_slps if slp.value > 0}
+                # filter out negative slps and slps with multiple lines of the same value
+                next_slps = {slp for slp in next_slps if slp.value > 0 and slp.value not in slp.values[:-1]}
                 all_next_slps.update(next_slps)
         return all_next_slps
 

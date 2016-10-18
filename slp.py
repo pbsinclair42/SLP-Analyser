@@ -85,7 +85,7 @@ class SLP:
     def __eq__(self, other):
         if isinstance(other, self.__class__):
             if self.minimized and other.minimized:
-                return self.values == other.values
+                return frozenset(self.values) == frozenset(other.values)
             else:
                 return self.lines == other.lines
         else:
@@ -96,7 +96,7 @@ class SLP:
 
     def __hash__(self):
         if self.minimized:
-            return hash(tuple(self.values))
+            return hash(frozenset(self.values))
         else:
             return hash(tuple(self.lines))
 
