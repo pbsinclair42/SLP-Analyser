@@ -1,5 +1,3 @@
-from copy import deepcopy
-
 from slp import SLP, PosSLP
 from utils import Line
 
@@ -16,7 +14,7 @@ class Analyser:
         all_next_slps = set()
         for i in range(len(slp)):
             for j in range(len(slp)):
-                next_slps = [deepcopy(slp) for _ in range(2 if self.pos else 3)]
+                next_slps = [slp.deepcopy() for _ in range(2 if self.pos else 3)]
                 next_slps[0].add(Line(i, j, '*'))
                 next_slps[1].add(Line(i, j, '+'))
                 if not self.pos:

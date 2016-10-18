@@ -100,7 +100,7 @@ class SLP:
         else:
             return hash(tuple(self.lines))
 
-    def __deepcopy__(self, memodict={}):
+    def deepcopy(self):
         if self.minimized:
             copy = SLP(minimized=True)
             copy.values = list(self.values)
