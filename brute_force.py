@@ -28,11 +28,11 @@ class Analyser:
         new_slps = set()
         for slp in self.slps[-1]:
             next_slps = self.get_all_next_slps(slp)
-            next_slps = {slp for slp in next_slps if slp.value > 0 and slp.value not in self.values}
+            next_slps = {slp for slp in next_slps if slp.value > 0}
             new_values = {slp.value for slp in next_slps}
             self.values.update(new_values)
             new_slps.update(next_slps)
         seen = set()
-        new_slps = {slp for slp in new_slps if slp.value not in seen and not seen.add(slp.value)}
+        new_slps = {slp for slp in new_slps if tuple(slp.values) not in seen and not seen.add(tuple(slp.values))}
         self.slps.append(new_slps)
         self.current_size += 1
