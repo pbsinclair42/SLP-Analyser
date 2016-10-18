@@ -1,3 +1,5 @@
 Numbers that can be made with SLPs of length 6 but not PosSLPs of length 7
 {224, 254, 79}
+Numbers that can be made with SLPs of length 7 but not PosSLPs of length 9
+{4064, 65024, 65534, 65520, 4094, 6559, 65532, 6558, 6399}
 
