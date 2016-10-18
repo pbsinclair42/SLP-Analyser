@@ -82,11 +82,35 @@ class SLP:
             i += 1
         return to_return[:-1]
 
-    #def __deepcopy__(self, memodict={}):
-    #    copy = SLP()
-    #    for line in self.lines[1:]:
-    #        copy.add(line)
-    #    return copy
+    def __eq__(self, other):
+        if isinstance(other, self.__class__):
+            if self.minimized and other.minimized:
+                return self.values == other.values
+            else:
+                return self.lines == other.lines
+        else:
+            return False
+
+    def __ne__(self, other):
+        return not self.__eq__(other)
+
+    def __hash__(self):
+        if self.minimized:
+            return hash(tuple(self.values))
+        else:
+            return hash(tuple(self.lines))
+
+    def __deepcopy__(self, memodict={}):
+        if self.minimized:
+            copy = SLP(minimized=True)
+            copy.values = list(self.values)
+            copy.value = copy.values[-1]
+            return copy
+        else:
+            copy = SLP()
+            for line in self.lines[1:]:
+                copy.add(line)
+            return copy
 
 
 class PosSLP(SLP):

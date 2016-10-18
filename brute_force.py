@@ -32,7 +32,5 @@ class Analyser:
             new_values = {slp.value for slp in next_slps}
             self.values.update(new_values)
             new_slps.update(next_slps)
-        seen = set()
-        new_slps = {slp for slp in new_slps if tuple(slp.values) not in seen and not seen.add(tuple(slp.values))}
         self.slps.append(new_slps)
         self.current_size += 1
