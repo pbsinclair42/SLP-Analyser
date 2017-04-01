@@ -113,8 +113,8 @@ class SLP:
             return copy
 
 
-class PosSLP(SLP):
+class mSLP(SLP):
     def add(self, line):
         if line.symbol == '-':
-            raise SLPException("No subtraction allowed in PosSLPs")
+            raise SLPException("No subtraction allowed in mSLPs")
         super().add(line)
