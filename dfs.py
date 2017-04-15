@@ -1,14 +1,13 @@
-import time
 import cProfile
 
 class PosSLPAnalyser:
 
     def __init__(self):
-        self.slps = [[(1,)]]
-        self.values = {1}
-        self.current_size = 0
+        pass
 
     def get_all_next_slps(self, slp):
+        # Given an mSLP slp, returns all mSLPs which can be created by adding a single line to slp
+        # Does some clever things to avoid duplicates, see Section 3.2: Challenges for more information
         all_next_slps = set()
         l=len(slp)
         for i in range(l):
@@ -21,29 +20,31 @@ class PosSLPAnalyser:
                     all_next_slps.add(new)
         return all_next_slps
 
-    def depth_limited_search(self, slp, depth):
+    def _depth_limited_search(self, slp, depth):
         values = {slp[-1]}
         if depth>0:
             depth -= 1
             next_slps = self.get_all_next_slps(slp)
-            for slp in next_slps:
-                values.update(self.depth_limited_search(slp, depth))
+            for next_slp in next_slps:
+                values.update(self._depth_limited_search(next_slp, depth))
         return values
 
-    def calculate_next_values(self):
-        new_slps = []
-        l=self.current_size
-        for slp in self.slps[-1]:
-            next_slps = self.get_all_next_slps(slp)
-            new_slps += next_slps
-        new_values = {slp[-1] for slp in new_slps}
-        self.values.update(new_values)
-        self.slps.append(new_slps)
-        self.current_size += 1
+    def depth_limited_search(self, depth):
+        # Performs a depth limited traversal of the graph of all SLPs up to a maximum SLP size of depth
+        values = {1}
+        if depth>0:
+            depth -= 1
+            next_slps = self.get_all_next_slps((1,))
+            for next_slp in next_slps:
+                values.update(self._depth_limited_search(next_slp, depth))
+        return values
+
 
 class SLPAnalyser(PosSLPAnalyser):
 
     def get_all_next_slps(self, slp):
+        # Given an SLP slp, returns all SLPs which can be created by adding a single line to slp
+        # Does some clever things to avoid duplicates, see Section 3.2: Challenges for more information
         all_next_slps = []
         l=len(slp)
         for i in range(l):
@@ -61,36 +62,19 @@ class SLPAnalyser(PosSLPAnalyser):
 
 
 if __name__ == '__main__':
-    SLP_MAX_SIZE = 6
-    MSLP_MAX_SIZE = 7
-
     slpAnalyser = SLPAnalyser()
     mslpAnalyser = PosSLPAnalyser()
 
-    start_time = time.time()
+    SLP_MAX_SIZE = 8
+    MSLP_MAX_SIZE= 8
 
-    def do_the_stuff():
-        for _ in range(MSLP_MAX_SIZE):
-            mslpAnalyser.calculate_next_values()
-            print('MSLP size ' + str(mslpAnalyser.current_size) + ' complete')
-        for _ in range(SLP_MAX_SIZE):
-            slpAnalyser.calculate_next_values()
-            print('SLP size ' + str(slpAnalyser.current_size) + ' complete')
-    #cProfile.run("do_the_stuff()")
-    
-    #do_the_stuff()
-    end_time = time.time()
-    total_time = end_time - start_time
-    #print(len(slpAnalyser.slps[-1]))
-    #print[slp for slp in mslpAnalyser.slps[-1] if slp[-1]==4088]
-    #print(total_time)
-    #print(mslpAnalyser.values)
-    
-    start_time = time.time()
-
-    values = mslpAnalyser.depth_limited_search((1,), MSLP_MAX_SIZE)
-    end_time = time.time()
-    total_time = end_time - start_time
-    print(total_time)
-
-    #print(mslpAnalyser.slps)
+    mvalues = mslpAnalyser.depth_limited_search(MSLP_MAX_SIZE)
+    values = slpAnalyser.depth_limited_search(SLP_MAX_SIZE)
+    print("Values that can be created by SLPs of length " + str(SLP_MAX_SIZE) +
+          " but not mSLPs of length " + str(MSLP_MAX_SIZE) + ':')
+    print(values - mvalues)
+    print("Smallest value not computed by SLPs of length " + str(SLP_MAX_SIZE)+':')
+    i=1
+    while i in values:
+        i+=1
+    print(i)
