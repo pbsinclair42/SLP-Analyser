@@ -65,16 +65,25 @@ if __name__ == '__main__':
     slpAnalyser = SLPAnalyser()
     mslpAnalyser = PosSLPAnalyser()
 
-    SLP_MAX_SIZE = 8
-    MSLP_MAX_SIZE= 8
+    SLP_MAX_SIZE = 1
+    MSLP_MAX_SIZE= 1
 
-    mvalues = mslpAnalyser.depth_limited_search(MSLP_MAX_SIZE)
-    values = slpAnalyser.depth_limited_search(SLP_MAX_SIZE)
-    print("Values that can be created by SLPs of length " + str(SLP_MAX_SIZE) +
-          " but not mSLPs of length " + str(MSLP_MAX_SIZE) + ':')
-    print(values - mvalues)
-    print("Smallest value not computed by SLPs of length " + str(SLP_MAX_SIZE)+':')
-    i=1
-    while i in values:
-        i+=1
-    print(i)
+    found = set()
+
+    while True:
+        mvalues = mslpAnalyser.depth_limited_search(MSLP_MAX_SIZE)
+        values = slpAnalyser.depth_limited_search(SLP_MAX_SIZE)
+        found.update(values-mvalues)
+        print("Values that can be created by SLPs of length " + str(SLP_MAX_SIZE) +
+              " but not mSLPs of length " + str(MSLP_MAX_SIZE) + ':')
+        print(values - mvalues)
+        print("Smallest value not computed by SLPs of length " + str(SLP_MAX_SIZE)+':')
+        smallest_not_found=1
+        while smallest_not_found in values:
+            smallest_not_found+=1
+        print(smallest_not_found)
+        print("Sequence so far: ")
+        print(sorted([v for v in found if v < smallest_not_found]))
+
+        SLP_MAX_SIZE+=1
+        MSLP_MAX_SIZE+=1       
